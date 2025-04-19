@@ -1,14 +1,11 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Apr 19 16:45:36 2025
-
-@author: marclambertes
-"""
-
 import streamlit as st
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Apply FiveThirtyEight theme to plots
+plt.style.use('fivethirtyeight')
 
 # Title
 st.title("Miedema Data Viewer - Arsenal 2017/2018")
