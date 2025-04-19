@@ -53,7 +53,7 @@ else:
 
     # Create circular visual using matplotlib
     fig, ax = plt.subplots(figsize=(4, 4))
-    circle = plt.Circle((0.5, 0.5), 0.4, color='#30a2da', ec='black')
+    circle = plt.Circle((0.3, 0.3), 0.4, color='#30a2da', ec='black')
     ax.add_patch(circle)
     plt.text(0.5, 0.5, str(count), fontsize=28, fontweight='bold', ha='center', va='center')
     plt.text(0.5, 0.15, label, fontsize=14, ha='center', va='center')
