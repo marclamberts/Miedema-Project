@@ -12,7 +12,7 @@ plt.style.use('fivethirtyeight')
 st.title("Miedema Data Viewer - Arsenal 2017/2018")
 
 # Folder path
-folder_path = "Arsenal 2017-2018"
+folder_path = "Arsenal 2023-2024"
 
 # Check if folder exists
 if not os.path.exists(folder_path):
