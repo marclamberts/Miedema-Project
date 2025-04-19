@@ -21,28 +21,19 @@ else:
     goals_count = 0
     assists_count = 0
 
-    # Loop through all files in the folder
+    # Loop through all CSV files in the folder
     for filename in os.listdir(folder_path):
         file_path = os.path.join(folder_path, filename)
 
-        # Only process text or CSV files
-        if filename.endswith(".txt") or filename.endswith(".csv"):
+        if filename.endswith(".csv"):
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    lines = f.readlines()
-                    for line in lines:
-                        # Try to parse line as JSON and count goals/assists for V. Miedema
-                        try:
-                            data = json.loads(line)
-                            if data.get("playerName") == "V. Miedema":
-                                if data.get("typeId") == 16:
-                                    goals_count += 1
-                                elif data.get("typeId") == 15:
-                                    assists_count += 1
-                        except:
-                            pass
+                df = pd.read_csv(file_path)
+                # Filter for V. Miedema and count typeId
+                if 'playerName' in df.columns and 'typeId' in df.columns:
+                    goals_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 16)].shape[0]
+                    assists_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 15)].shape[0]
             except Exception as e:
-                st.warning(f"Could not read file {filename}: {e}")
+                st.warning(f"Could not read CSV file {filename}: {e}")
 
     # Dropdown menu for stat type
     stat_choice = st.selectbox("Choose statistic to view", ["Goals", "Assists"])
