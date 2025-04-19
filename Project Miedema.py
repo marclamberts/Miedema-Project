@@ -42,7 +42,7 @@ else:
                 # Filter for V. Miedema and count typeId
                 if 'playerName' in df.columns and 'typeId' in df.columns:
                     goals_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 16)].shape[0]
-                    assists_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 15)].shape[0]
+                    assists_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 1)].shape[0]
             except Exception as e:
                 st.warning(f"Could not read CSV file {filename}: {e}")
 
@@ -52,7 +52,7 @@ else:
         label = "Goals"
     else:
         count = assists_count
-        label = "Assists"
+        label = "Passes"
 
     # Create circular visual using matplotlib in col1
     with col1:
@@ -81,10 +81,10 @@ for season in seasons:
                     df = pd.read_csv(file_path)
                     if 'playerName' in df.columns and 'typeId' in df.columns:
                         g_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 16)].shape[0]
-                        a_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 15)].shape[0]
+                        a_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 1)].shape[0]
                 except:
                     continue
-    line_data.append({"Season": season, "Goals": g_count, "Assists": a_count})
+    line_data.append({"Season": season, "Goals": g_count, "Passes": a_count})
 
 # Convert to DataFrame and plot line chart in col2
 line_df = pd.DataFrame(line_data)
