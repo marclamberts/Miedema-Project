@@ -9,10 +9,15 @@ import json
 plt.style.use('fivethirtyeight')
 
 # Title
-st.title("Miedema Data Viewer - Arsenal 2017/2018")
+st.title("Miedema Data Viewer - Arsenal Stats")
 
-# Folder path
-folder_path = "Arsenal 2023-2024"
+# Season selection dropdown
+seasons = [f"Arsenal {year}-{year+1}" for year in range(2017, 2024)]
+selected_season = st.selectbox("Choose Season", seasons)
+folder_path = selected_season
+
+# Stat type dropdown
+stat_choice = st.selectbox("Choose statistic to view", ["Goals", "Assists"])
 
 # Check if folder exists
 if not os.path.exists(folder_path):
@@ -34,9 +39,6 @@ else:
                     assists_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 15)].shape[0]
             except Exception as e:
                 st.warning(f"Could not read CSV file {filename}: {e}")
-
-    # Dropdown menu for stat type
-    stat_choice = st.selectbox("Choose statistic to view", ["Goals", "Assists"])
 
     # Get the selected stat count
     if stat_choice == "Goals":
