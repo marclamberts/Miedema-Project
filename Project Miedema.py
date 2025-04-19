@@ -8,6 +8,9 @@ import json
 # Apply FiveThirtyEight theme to plots
 plt.style.use('fivethirtyeight')
 
+# Sidebar menu
+menu = st.sidebar.radio("Menu", ["Scouting", "Analysis", "Contact"])
+
 # Title
 st.title("Miedema Data Viewer - Arsenal Stats")
 
