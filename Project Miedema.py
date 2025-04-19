@@ -12,12 +12,15 @@ plt.style.use('fivethirtyeight')
 st.title("Miedema Data Viewer - Arsenal Stats")
 
 # Season selection dropdown
-seasons = [f"Arsenal {year}-{year+1}" for year in range(2017, 2024)]
+seasons = [f"Arsenal {year}-{year+1}" for year in range(2017, 2024)] + ["Manchester City 2024-2025"]
 selected_season = st.selectbox("Choose Season", seasons)
 folder_path = selected_season
 
 # Stat type dropdown
 stat_choice = st.selectbox("Choose statistic to view", ["Goals", "Assists"])
+
+# Initialize line chart data
+season_totals = []
 
 # Check if folder exists
 if not os.path.exists(folder_path):
@@ -60,3 +63,33 @@ else:
     ax.axis('off')
 
     st.pyplot(fig)
+
+# Build line chart data for all seasons
+line_data = []
+for season in seasons:
+    path = season
+    g_count = 0
+    a_count = 0
+    if os.path.exists(path):
+        for filename in os.listdir(path):
+            file_path = os.path.join(path, filename)
+            if filename.endswith(".csv"):
+                try:
+                    df = pd.read_csv(file_path)
+                    if 'playerName' in df.columns and 'typeId' in df.columns:
+                        g_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 16)].shape[0]
+                        a_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 15)].shape[0]
+                except:
+                    continue
+    line_data.append({"Season": season, "Goals": g_count, "Assists": a_count})
+
+# Convert to DataFrame and plot
+line_df = pd.DataFrame(line_data)
+fig2, ax2 = plt.subplots()
+ax2.plot(line_df["Season"], line_df[stat_choice], marker='o')
+ax2.set_title(f"V. Miedema - {stat_choice} Over Seasons")
+ax2.set_ylabel(stat_choice)
+ax2.set_xlabel("Season")
+plt.xticks(rotation=45)
+plt.tight_layout()
+st.pyplot(fig2)
