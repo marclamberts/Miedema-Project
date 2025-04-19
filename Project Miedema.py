@@ -22,6 +22,9 @@ stat_choice = st.selectbox("Choose statistic to view", ["Goals", "Assists"])
 # Initialize line chart data
 season_totals = []
 
+# Layout for side-by-side display
+col1, col2 = st.columns(2)
+
 # Check if folder exists
 if not os.path.exists(folder_path):
     st.error(f"Folder '{folder_path}' not found.")
@@ -51,18 +54,18 @@ else:
         count = assists_count
         label = "Assists"
 
-    # Create circular visual using matplotlib
-    fig, ax = plt.subplots(figsize=(4, 4))
-    circle = plt.Circle((0.5, 0.5), 0.4, color='#30a2da', ec='black')
-    ax.add_patch(circle)
-    plt.text(0.5, 0.5, str(count), fontsize=28, fontweight='bold', ha='center', va='center')
-    plt.text(0.5, 0.15, label, fontsize=14, ha='center', va='center')
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.set_aspect('equal')
-    ax.axis('off')
-
-    st.pyplot(fig)
+    # Create circular visual using matplotlib in col1
+    with col1:
+        fig, ax = plt.subplots(figsize=(4, 4))
+        circle = plt.Circle((0.5, 0.5), 0.4, color='#30a2da', ec='black')
+        ax.add_patch(circle)
+        plt.text(0.5, 0.5, str(count), fontsize=28, fontweight='bold', ha='center', va='center')
+        plt.text(0.5, 0.15, label, fontsize=14, ha='center', va='center')
+        ax.set_xlim(0, 1)
+        ax.set_ylim(0, 1)
+        ax.set_aspect('equal')
+        ax.axis('off')
+        st.pyplot(fig)
 
 # Build line chart data for all seasons
 line_data = []
@@ -83,13 +86,14 @@ for season in seasons:
                     continue
     line_data.append({"Season": season, "Goals": g_count, "Assists": a_count})
 
-# Convert to DataFrame and plot
+# Convert to DataFrame and plot line chart in col2
 line_df = pd.DataFrame(line_data)
-fig2, ax2 = plt.subplots()
-ax2.plot(line_df["Season"], line_df[stat_choice], marker='o')
-ax2.set_title(f"V. Miedema - {stat_choice} Over Seasons")
-ax2.set_ylabel(stat_choice)
-ax2.set_xlabel("Season")
-plt.xticks(rotation=45)
-plt.tight_layout()
-st.pyplot(fig2)
+with col2:
+    fig2, ax2 = plt.subplots()
+    ax2.plot(line_df["Season"], line_df[stat_choice], marker='o')
+    ax2.set_title(f"V. Miedema - {stat_choice} Over Seasons")
+    ax2.set_ylabel(stat_choice)
+    ax2.set_xlabel("Season")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    st.pyplot(fig2)
