@@ -17,7 +17,7 @@ selected_season = st.selectbox("Choose Season", seasons)
 folder_path = selected_season
 
 # Stat type dropdown
-stat_choice = st.selectbox("Choose statistic to view", ["Goals", "Assists"])
+stat_choice = st.selectbox("Choose statistic to view", ["Goals", "Passes"])
 
 # Initialize line chart data
 season_totals = []
@@ -30,7 +30,7 @@ if not os.path.exists(folder_path):
     st.error(f"Folder '{folder_path}' not found.")
 else:
     goals_count = 0
-    assists_count = 0
+    passes_count = 0
 
     # Loop through all CSV files in the folder
     for filename in os.listdir(folder_path):
@@ -42,7 +42,7 @@ else:
                 # Filter for V. Miedema and count typeId
                 if 'playerName' in df.columns and 'typeId' in df.columns:
                     goals_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 16)].shape[0]
-                    assists_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 1)].shape[0]
+                    passes_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 1)].shape[0]
             except Exception as e:
                 st.warning(f"Could not read CSV file {filename}: {e}")
 
@@ -51,7 +51,7 @@ else:
         count = goals_count
         label = "Goals"
     else:
-        count = assists_count
+        count = passes_count
         label = "Passes"
 
     # Create circular visual using matplotlib in col1
@@ -72,7 +72,7 @@ line_data = []
 for season in seasons:
     path = season
     g_count = 0
-    a_count = 0
+    p_count = 0
     if os.path.exists(path):
         for filename in os.listdir(path):
             file_path = os.path.join(path, filename)
@@ -81,10 +81,10 @@ for season in seasons:
                     df = pd.read_csv(file_path)
                     if 'playerName' in df.columns and 'typeId' in df.columns:
                         g_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 16)].shape[0]
-                        a_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 1)].shape[0]
+                        p_count += df[(df['playerName'] == 'V. Miedema') & (df['typeId'] == 1)].shape[0]
                 except:
                     continue
-    line_data.append({"Season": season, "Goals": g_count, "Passes": a_count})
+    line_data.append({"Season": season, "Goals": g_count, "Passes": p_count})
 
 # Convert to DataFrame and plot line chart in col2
 line_df = pd.DataFrame(line_data)
